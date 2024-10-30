@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>change Password</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!--FireBase SDK-->
+    <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+        
+</head>
+<body>
+
+    <section class="text-center flex flex-col justify-center items-center">
+        <div class="2xl:container">
+            <div class="mx-auto grid grid-cols-1">
+                <form id="frm" >
+                    <h1 class="text-[30px]">Update Password</h1>
+                    <p>New Password</p>
+                    <input type="password" id="pass" placeholder="New Password" class="p-[10px] border border-black">
+                    <p id="emp" class="text-[red] flex"></p>
+                    <p>Confirm Password</p>
+                    <input type="password" id="word" placeholder="Confirm Password" class="p-[10px] border border-black">
+                    <p id="cemp" class="text-[red]"></p>  
+                    <button id="up" class="bg-[blue] text-[white] p-[5px] mt-[10px]">Update</button>
+                </form>
+                
+            </div>
+        </div>
+    </section>
+    
+
+
+    <script>
+        const newpass = document.getElementById("pass");
+        const conpass = document.getElementById("word");
+        const form = document.getElementById("frm");
+        const empty = document.getElementById("emp");
+        const confirmempty = document.getElementById("cemp");
+        const updates = document.getElementById("up");
+
+
+        function validation(newpassword,conpassword){
+
+            if(!newpassword.match(conpassword)){
+                confirmempty.textContent ="*Password did not match";
+            }
+            else{
+                confirmempty.textContent =" ";
+            }
+
+
+
+
+            if(newpassword.length === 0){
+                empty.textContent ="*Required"
+            }
+            else{
+                empty.textContent = " ";
+            }
+
+
+
+
+        }
+
+        function savedata(newpassword,conpassword){
+            const firebaseConfig = {
+                apiKey: "AIzaSyBrBQzwsFGHzn0XambTao0NC8karH52Ho0",
+                authDomain: "forms-2538d.firebaseapp.com",
+                databaseURL: "https://forms-2538d-default-rtdb.asia-southeast1.firebasedatabase.app",
+                projectId: "forms-2538d",
+                storageBucket: "forms-2538d.appspot.com",
+                messagingSenderId: "731922666770",
+                appId: "1:731922666770:web:8164e5c7baef3d3298cfcb",
+                measurementId: "G-87L80RGC7M"
+            }; 
+
+                firebase.initializeApp(firebaseConfig);
+
+                const db = firebase.database().ref("ReqForm");
+
+                db.push({
+                    newpassword : newpassword,
+                    conpassword : conpassword
+                });
+
+        }
+
+        form.addEventListener("submit",(e)=>{
+            e.preventDefault();
+
+
+            const newpassword = newpass.value;
+            const conpassword = conpass.value;
+
+            validation(newpassword,conpassword);
+            savedata(newpassword,conpassword);
+
+        })
+
+    </script>
+</body>
+</html>
